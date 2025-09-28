@@ -1,0 +1,263 @@
+version: '3.8'
+
+services:
+  # Database Services
+  postgres:
+    image: postgres:15
+    container_name: social-commerce-postgres
+    environment:
+      POSTGRES_DB: social_commerce
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres123
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - social-commerce-network
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.8.0
+    container_name: social-commerce-elasticsearch
+    environment:
+      - discovery.type=single-node
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - xpack.security.enabled=false
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    volumes:
+      - elasticsearch_data:/usr/share/elasticsearch/data
+    networks:
+      - social-commerce-network
+
+  redis:
+    image: redis:7-alpine
+    container_name: social-commerce-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - social-commerce-network
+
+  # Backend Microservices
+  user-service:
+    build:
+      context: ./backend/user-service
+      dockerfile: Dockerfile
+    container_name: user-service
+    environment:
+      - DATABASE_URL=postgresql://user_service_user:user_service_pass@postgres:5432/user_service_db
+      - REDIS_URL=redis://redis:6379
+      - SECRET_KEY=${USER_SERVICE_SECRET_KEY:-your-secret-key-here}
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - social-commerce-network
+
+  product-service:
+    build:
+      context: ./backend/product-service
+      dockerfile: Dockerfile
+    container_name: product-service
+    environment:
+      - DATABASE_URL=postgresql://product_service_user:product_service_pass@postgres:5432/product_service_db
+      - ELASTICSEARCH_URL=http://elasticsearch:9200
+      - REDIS_URL=redis://redis:6379
+    ports:
+      - "8001:8000"
+    depends_on:
+      - postgres
+      - elasticsearch
+      - redis
+    networks:
+      - social-commerce-network
+
+  order-service:
+    build:
+      context: ./backend/order-service
+      dockerfile: Dockerfile
+    container_name: order-service
+    environment:
+      - DATABASE_URL=postgresql://order_service_user:order_service_pass@postgres:5432/order_service_db
+      - REDIS_URL=redis://redis:6379
+    ports:
+      - "8002:8000"
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - social-commerce-network
+
+  social-service:
+    build:
+      context: ./backend/social-service
+      dockerfile: Dockerfile
+    container_name: social-service
+    environment:
+      - DATABASE_URL=postgresql://social_service_user:social_service_pass@postgres:5432/social_service_db
+      - REDIS_URL=redis://redis:6379
+    ports:
+      - "8003:8000"
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - social-commerce-network
+
+  payment-service:
+    build:
+      context: ./backend/payment-service
+      dockerfile: Dockerfile
+    container_name: payment-service
+    environment:
+      - DATABASE_URL=postgresql://payment_service_user:payment_service_pass@postgres:5432/payment_service_db
+      - STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY}
+      - REDIS_URL=redis://redis:6379
+    ports:
+      - "8004:8000"
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - social-commerce-network
+
+  notification-service:
+    build:
+      context: ./backend/notification-service
+      dockerfile: Dockerfile
+    container_name: notification-service
+    environment:
+      - DATABASE_URL=postgresql://notification_service_user:notification_service_pass@postgres:5432/notification_service_db
+      - REDIS_URL=redis://redis:6379
+    ports:
+      - "8005:8000"
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - social-commerce-network
+
+  api-gateway:
+    build:
+      context: ./backend/api-gateway
+      dockerfile: Dockerfile
+    container_name: api-gateway
+    environment:
+      - USER_SERVICE_URL=http://user-service:8000
+      - PRODUCT_SERVICE_URL=http://product-service:8000
+      - ORDER_SERVICE_URL=http://order-service:8000
+      - SOCIAL_SERVICE_URL=http://social-service:8000
+      - PAYMENT_SERVICE_URL=http://payment-service:8000
+      - NOTIFICATION_SERVICE_URL=http://notification-service:8000
+      - AI_RECOMMENDATION_URL=http://recommendation-engine:8001
+    ports:
+      - "8080:8000"
+    depends_on:
+      - user-service
+      - product-service
+      - order-service
+      - social-service
+      - payment-service
+      - notification-service
+    networks:
+      - social-commerce-network
+
+  # AI/ML Services
+  recommendation-engine:
+    build:
+      context: ./ai-services/recommendation-engine
+      dockerfile: Dockerfile
+    container_name: recommendation-engine
+    environment:
+      - REDIS_URL=redis://redis:6379
+    ports:
+      - "8001:8001"
+    depends_on:
+      - redis
+    networks:
+      - social-commerce-network
+
+  search-service:
+    build:
+      context: ./ai-services/search-service
+      dockerfile: Dockerfile
+    container_name: search-service
+    environment:
+      - ELASTICSEARCH_URL=http://elasticsearch:9200
+    ports:
+      - "8006:8000"
+    depends_on:
+      - elasticsearch
+    networks:
+      - social-commerce-network
+
+  chatbot-service:
+    build:
+      context: ./ai-services/chatbot-service
+      dockerfile: Dockerfile
+    container_name: chatbot-service
+    environment:
+      - REDIS_URL=redis://redis:6379
+    ports:
+      - "8007:8000"
+    depends_on:
+      - redis
+    networks:
+      - social-commerce-network
+
+  fraud-detection:
+    build:
+      context: ./ai-services/fraud-detection
+      dockerfile: Dockerfile
+    container_name: fraud-detection
+    environment:
+      - REDIS_URL=redis://redis:6379
+    ports:
+      - "8008:8000"
+    depends_on:
+      - redis
+    networks:
+      - social-commerce-network
+
+  # Frontend
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: social-commerce-frontend
+    environment:
+      - REACT_APP_API_URL=http://localhost:8080
+    ports:
+      - "3000:3000"
+    depends_on:
+      - api-gateway
+    networks:
+      - social-commerce-network
+
+  # Monitoring & Analytics
+  kibana:
+    image: docker.elastic.co/kibana/kibana:8.8.0
+    container_name: social-commerce-kibana
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+    ports:
+      - "5601:5601"
+    depends_on:
+      - elasticsearch
+    networks:
+      - social-commerce-network
+
+volumes:
+  postgres_data:
+  elasticsearch_data:
+  redis_data:
+
+networks:
+  social-commerce-network:
+    driver: bridge
