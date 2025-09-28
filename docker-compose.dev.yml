@@ -1,0 +1,84 @@
+version: '3.8'
+
+services:
+  # Database Services
+  postgres:
+    image: postgres:15
+    container_name: social-commerce-postgres
+    environment:
+      POSTGRES_DB: social_commerce
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres123
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - social-commerce-network
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.8.0
+    container_name: social-commerce-elasticsearch
+    environment:
+      - discovery.type=single-node
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - xpack.security.enabled=false
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    volumes:
+      - elasticsearch_data:/usr/share/elasticsearch/data
+    networks:
+      - social-commerce-network
+
+  redis:
+    image: redis:7-alpine
+    container_name: social-commerce-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - social-commerce-network
+
+  # Backend Services
+  user-service:
+    build:
+      context: ./backend/user-service
+      dockerfile: Dockerfile
+    container_name: user-service
+    environment:
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DEBUG=True
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgres
+    networks:
+      - social-commerce-network
+    volumes:
+      - ./backend/user-service:/app
+
+  # Monitoring & Analytics
+  kibana:
+    image: docker.elastic.co/kibana/kibana:8.8.0
+    container_name: social-commerce-kibana
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+    ports:
+      - "5601:5601"
+    depends_on:
+      - elasticsearch
+    networks:
+      - social-commerce-network
+
+volumes:
+  postgres_data:
+  elasticsearch_data:
+  redis_data:
+
+networks:
+  social-commerce-network:
+    driver: bridge
