@@ -1,0 +1,15 @@
+services:
+  backend:
+    source:
+      rootDirectory: backend
+    build:
+      nixpacksPlan:
+        phases:
+          setup:
+            nixPkgs:
+              - nodejs-18_x
+          install:
+            cmds:
+              - npm install
+        start:
+          cmd: npm start
