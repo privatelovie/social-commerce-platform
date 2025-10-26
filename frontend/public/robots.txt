@@ -1,3 +1,5 @@
 # https://www.robotstxt.org/robotstxt.html
 User-agent: *
-Disallow:
+Allow: /
+
+Sitemap: https://social-commerce-platform-6sg33o2e5-js6990625-gmailcoms-projects.vercel.app/sitemap.xml

@@ -1,5 +1,21 @@
 # Social Commerce AI Platform
 
+> ## 🎉 **NEW: REAL DATABASE & USER ACCOUNTS NOW AVAILABLE!**
+> Your platform now supports **real user registration, authentication, and real-time chat**!
+> 
+> 📖 **Quick Start Guides:**
+> - **[START.md](START.md)** - Get running in 5 minutes
+> - **[README_DATABASE.md](README_DATABASE.md)** - Complete feature overview  
+> - **[REAL_DATABASE_SETUP.md](REAL_DATABASE_SETUP.md)** - Detailed setup guide
+>
+> ✨ **What's Ready:**
+> - ✅ Real user accounts (register/login)
+> - ✅ MongoDB database (local or cloud)
+> - ✅ Real-time messaging with Socket.IO
+> - ✅ Social features (posts, likes, comments, follows)
+> - ✅ Shopping cart & products
+> - ✅ JWT authentication & security
+
 A next-generation AI-driven social e-commerce platform that blends the shopping power of Amazon with the social interactivity of Twitter. Users can create personal profiles, follow brands or other users, post short updates, share product reviews, and start real-time discussions about products.
 
 ## 🚀 Key Features
@@ -241,14 +257,53 @@ cd ai-services/recommendation-engine && pytest
 
 ## 🚀 Deployment
 
+The platform supports multiple deployment options:
+
+### Quick Deployment Scripts
+```bash
+# Quick Vercel deployment
+./scripts/deploy.sh
+
+# Quick Docker setup
+./scripts/docker-start.sh
+```
+
+### Vercel Deployment (Recommended for MVP)
+```bash
+# Install Vercel CLI
+npm install -g vercel
+
+# Deploy backend
+cd backend
+vercel --prod
+
+# Deploy frontend
+cd ../frontend
+vercel --prod
+```
+
 ### Docker Production
 ```bash
 # Build production images
-docker-compose -f docker-compose.prod.yml build
+docker-compose -f docker-compose.production.yml build
 
 # Deploy to production
-docker-compose -f docker-compose.prod.yml up -d
+docker-compose -f docker-compose.production.yml up -d
 ```
+
+### GitHub Actions CI/CD
+Automated deployment on push to `main` branch:
+- Runs tests for backend and frontend
+- Deploys to Vercel automatically
+- Builds and pushes Docker images
+- Sends deployment notifications
+
+### Environment Configuration
+See [DEPLOYMENT.md](DEPLOYMENT.md) for detailed environment setup:
+- Environment variables guide
+- Database configuration
+- API keys setup
+- Production security checklist
 
 ### Cloud Deployment (AWS)
 ```bash
@@ -257,12 +312,6 @@ aws configure
 
 # Deploy using CloudFormation/Terraform
 # (Infrastructure templates in /infrastructure directory)
-```
-
-### Kubernetes Deployment
-```bash
-# Apply Kubernetes manifests
-kubectl apply -f infrastructure/k8s/
 ```
 
 ## 🤝 Contributing

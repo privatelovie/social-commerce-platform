@@ -1,0 +1,47 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js",
+    "build": "echo 'No build step needed for Node.js backend'",
+    "test": "node test-api.js",
+    "test:full": "node test-full-api.js",
+    "test:watch": "nodemon --exec \"npm test\"",
+    "lint": "echo 'No linter configured yet'",
+    "docker:build": "docker build -t social-commerce-backend .",
+    "docker:run": "docker run -p 5000:5000 --env-file .env social-commerce-backend",
+    "docker:dev": "docker-compose -f ../docker-compose.yml up backend",
+    "vercel:deploy": "vercel --prod",
+    "heroku:deploy": "git push heroku main"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "axios": "^1.12.2",
+    "bcryptjs": "^3.0.2",
+    "cheerio": "^1.1.2",
+    "compression": "^1.8.1",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.2",
+    "express": "^5.1.0",
+    "express-rate-limit": "^8.1.0",
+    "helmet": "^8.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.18.3",
+    "morgan": "^1.10.1",
+    "multer": "^2.0.2",
+    "node-cron": "^4.2.1",
+    "nodemailer": "^7.0.6",
+    "openai": "^5.23.1",
+    "socket.io": "^4.8.1",
+    "stripe": "^18.5.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10"
+  }
+}
