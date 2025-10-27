@@ -8,7 +8,7 @@
   "rewrites": [
     {
       "source": "/api/(.*)",
-      "destination": "https://social-commerce-backend.vercel.app/api/$1"
+      "destination": "https://socialcommerce-production.up.railway.app/api/$1"
     },
     {
       "source": "/(.*)",
@@ -46,7 +46,7 @@
   ],
   "env": {
     "NODE_ENV": "production",
-    "REACT_APP_API_URL": "https://social-commerce-backend.vercel.app",
+    "REACT_APP_API_URL": "https://socialcommerce-production.up.railway.app",
     "CI": "false",
     "GENERATE_SOURCEMAP": "false",
     "ESLINT_NO_DEV_ERRORS": "true",
