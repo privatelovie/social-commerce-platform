@@ -19,7 +19,7 @@ class SocketService extends EventEmitter {
   constructor() {
     super();
     this.config = {
-      url: process.env.REACT_APP_SOCKET_URL || 'http://localhost:3001',
+      url: process.env.REACT_APP_API_URL || 'https://socialcommerce-production.up.railway.app',
       options: {
         transports: ['websocket', 'polling'],
         timeout: 5000,
