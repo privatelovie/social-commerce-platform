@@ -256,7 +256,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
 
           {/* Stats Cards */}
           <Grid container spacing={3} sx={{ mb: 4 }}>
-            <Grid item xs={12} sm={6} md={3} component="div">
+            <Grid xs={12} sm={6} md={3}>
               <Card>
                 <CardContent>
                   <Box display="flex" alignItems="center" justifyContent="space-between">
@@ -280,7 +280,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
               </Card>
             </Grid>
 
-            <Grid item xs={12} sm={6} md={3} component="div">
+            <Grid xs={12} sm={6} md={3}>
               <Card>
                 <CardContent>
                   <Box display="flex" alignItems="center" justifyContent="space-between">
@@ -304,7 +304,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
               </Card>
             </Grid>
 
-            <Grid item xs={12} sm={6} md={3} component="div">
+            <Grid xs={12} sm={6} md={3}>
               <Card>
                 <CardContent>
                   <Box display="flex" alignItems="center" justifyContent="space-between">
@@ -328,7 +328,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
               </Card>
             </Grid>
 
-            <Grid item xs={12} sm={6} md={3} component="div">
+            <Grid xs={12} sm={6} md={3}>
               <Card>
                 <CardContent>
                   <Box display="flex" alignItems="center" justifyContent="space-between">
