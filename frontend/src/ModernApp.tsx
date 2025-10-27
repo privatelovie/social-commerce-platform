@@ -44,7 +44,7 @@ import CartDrawer from './components/CartDrawer';
 import AIGuide from './components/AIGuide';
 import VideoReelsPage from './pages/VideoReelsPage';
 import MessagingPage from './pages/MessagingPage';
-import DemoLauncher from './components/DemoLauncher';
+// import DemoLauncher from './components/DemoLauncher'; // Removed
 import DirectMessages from './components/DirectMessages';
 import EnhancedProfile from './components/EnhancedProfile';
 import AnalyticsDashboard from './components/AnalyticsDashboard';
@@ -63,6 +63,7 @@ import demoRealProducts from './services/demoRealProducts';
 
 // Styles
 import './styles/modern.css';
+import './styles/mobile.css';
 
 
 // Mock Social Posts
@@ -395,7 +396,7 @@ const AppContent: React.FC = () => {
   const [showUserSearch, setShowUserSearch] = useState(false);
   const [showHashtagExplorer, setShowHashtagExplorer] = useState(false);
   const [showProfileEditor, setShowProfileEditor] = useState(false);
-  const [showDemoLauncher, setShowDemoLauncher] = useState(true);
+  // const [showDemoLauncher, setShowDemoLauncher] = useState(true); // Removed
 
   // Handle navigation
   const handleNavigate = (path: string) => {
@@ -408,8 +409,6 @@ const AppContent: React.FC = () => {
     } else if (path === '/edit-profile' || path === 'edit-profile') {
       setShowProfileEditor(true);
       setCurrentView('edit-profile');
-    } else if (path === 'demo-launcher' || path === '/demo-launcher') {
-      setShowDemoLauncher(true);
     } else {
       setCurrentView(path.replace('/', '') || 'feed');
     }
@@ -480,26 +479,7 @@ const AppContent: React.FC = () => {
     setCurrentView('feed');
   };
 
-  // Demo launcher handlers
-  const handleLaunchReels = () => {
-    setShowDemoLauncher(false);
-    setCurrentView('videos');
-  };
-
-  const handleLaunchApp = () => {
-    setShowDemoLauncher(false);
-    setCurrentView('feed');
-  };
-
-  const handleLaunchMessaging = () => {
-    setShowDemoLauncher(false);
-    setCurrentView('messages');
-  };
-
-  const handleLaunchExplore = () => {
-    setShowDemoLauncher(false);
-    setCurrentView('explore');
-  };
+  // Demo launcher handlers removed - app starts directly in feed
 
   // Landing page for unauthenticated users
   if (!isAuthenticated) {
@@ -580,17 +560,7 @@ const AppContent: React.FC = () => {
     );
   }
 
-  // Show demo launcher first for authenticated users
-  if (showDemoLauncher) {
-    return (
-      <DemoLauncher
-        onLaunchReels={handleLaunchReels}
-        onLaunchApp={handleLaunchApp}
-        onLaunchMessaging={handleLaunchMessaging}
-        onLaunchExplore={handleLaunchExplore}
-      />
-    );
-  }
+  // App starts directly - no demo launcher needed
 
   // Main authenticated app
   return (
