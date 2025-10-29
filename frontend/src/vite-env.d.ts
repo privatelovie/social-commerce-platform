@@ -1,11 +1,9 @@
-/// <reference types="vite/client" />
+/// <reference types="react-scripts" />
 
-interface ImportMetaEnv {
-  readonly VITE_GOOGLE_CLIENT_ID: string
-  readonly VITE_API_URL: string
-  // add more env variables as needed
-}
-
-interface ImportMeta {
-  readonly env: ImportMetaEnv
+declare namespace NodeJS {
+  interface ProcessEnv {
+    readonly REACT_APP_GOOGLE_CLIENT_ID: string
+    readonly REACT_APP_API_URL: string
+    // add more env variables as needed
+  }
 }

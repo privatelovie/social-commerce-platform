@@ -7,10 +7,10 @@ interface GoogleAuthProviderWrapperProps {
 
 const GoogleAuthProviderWrapper: React.FC<GoogleAuthProviderWrapperProps> = ({ children }) => {
   // Get Google Client ID from environment variable
-  const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID || '';
+  const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID || '';
 
   if (!clientId) {
-    console.error('Google Client ID is not configured. Please set VITE_GOOGLE_CLIENT_ID in your .env file.');
+    console.error('Google Client ID is not configured. Please set REACT_APP_GOOGLE_CLIENT_ID in your .env file.');
     return <>{children}</>;
   }
 
