@@ -36,11 +36,13 @@ import {
   DarkMode,
   LightMode,
   VideoLibrary,
-  Message
+  Message,
+  Logout
 } from '@mui/icons-material';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useCart } from '../context/CartContext';
 import { useThemeMode } from '../context/ThemeContext';
+import { authAPI } from '../services/api';
 import demoProductService from '../services/demoRealProducts';
 import { OpenProductService } from '../services/productApi';
 import { RealProduct } from '../services/productApi';
@@ -97,6 +99,18 @@ const Navigation: React.FC<NavigationProps> = ({
   const { state: cartState } = useCart();
   const { mode: themeMode, toggleTheme } = useThemeMode();
   const openProductService = useMemo(() => new OpenProductService(), []);
+  
+  const handleLogout = async () => {
+    try {
+      await authAPI.logout();
+      // Redirect to login page
+      window.location.href = '/login';
+    } catch (error) {
+      console.error('Logout error:', error);
+      // Still redirect even if API call fails
+      window.location.href = '/login';
+    }
+  };
   
   // Load recent searches from localStorage
   useEffect(() => {
@@ -729,6 +743,27 @@ const Navigation: React.FC<NavigationProps> = ({
                 }
               }}
             />
+            
+            {/* Logout Button - Desktop only */}
+            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+              <IconButton 
+                onClick={handleLogout}
+                sx={{ 
+                  display: { xs: 'none', sm: 'inline-flex' },
+                  background: 'rgba(255, 255, 255, 0.9)',
+                  backdropFilter: 'blur(10px)',
+                  border: '1px solid rgba(0, 0, 0, 0.05)',
+                  '&:hover': {
+                    background: 'rgba(239, 68, 68, 0.1)',
+                    borderColor: 'rgba(239, 68, 68, 0.3)',
+                    transform: 'translateY(-1px)',
+                    boxShadow: '0 4px 12px rgba(239, 68, 68, 0.2)'
+                  }
+                }}
+              >
+                <Logout sx={{ color: '#ef4444', fontSize: 20 }} />
+              </IconButton>
+            </motion.div>
           </Box>
         </Toolbar>
       </AppBar>

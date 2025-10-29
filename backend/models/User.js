@@ -182,8 +182,7 @@ const userSchema = new mongoose.Schema({
 });
 
 // Indexes for performance
-userSchema.index({ username: 1 });
-userSchema.index({ email: 1 });
+// Note: username and email indexes are automatically created via unique: true
 userSchema.index({ followersCount: -1 });
 userSchema.index({ isCreator: 1, followersCount: -1 });
 userSchema.index({ specialties: 1 });

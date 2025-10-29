@@ -145,14 +145,14 @@ export const usersAPI = {
   },
 
   searchUsers: async (query, filters = {}) => {
-    const response = await api.get('/users/search', {
+    const response = await api.get('/users', {
       params: { q: query, ...filters }
     });
     return response.data;
   },
 
   getTrendingCreators: async (limit = 10) => {
-    const response = await api.get(`/users/trending?limit=${limit}`);
+    const response = await api.get(`/users/trending/creators?limit=${limit}`);
     return response.data;
   }
 };

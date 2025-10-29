@@ -49,6 +49,7 @@ import {
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../context/AuthContext';
 import { useSocial } from '../context/SocialContext';
+import { usersAPI } from '../services/api';
 
 interface UserSearchProps {
   onClose?: () => void;
@@ -192,42 +193,80 @@ const UserSearch: React.FC<UserSearchProps> = ({ onClose, onUserSelect }) => {
     }
   }, [searchQuery]);
 
-  const loadSuggestedUsers = () => {
-    // Filter out current user and add follow status
-    const suggested = mockUsers
-      .filter(user => user.id !== currentUser?.id)
-      .map(user => ({
-        ...user,
-        isFollowing: following.some(f => f.id === user.id),
-        isFollower: followers.some(f => f.id === user.id)
-      }))
-      .sort(() => Math.random() - 0.5) // Random shuffle
-      .slice(0, 10);
-    
-    setSuggestedUsers(suggested);
+  const loadSuggestedUsers = async () => {
+    try {
+      // Use real API to get trending creators
+      const response = await usersAPI.getTrendingCreators(10);
+      
+      const suggested = response.creators.map((user: any) => ({
+        id: user._id || user.id,
+        username: user.username,
+        displayName: user.displayName,
+        avatar: user.profile?.avatar || user.avatar || '',
+        bio: user.profile?.bio || user.bio || '',
+        isVerified: user.isVerified || false,
+        followerCount: user.socialStats?.followersCount || user.followersCount || 0,
+        followingCount: user.socialStats?.followingCount || user.followingCount || 0,
+        postCount: user.socialStats?.postsCount || user.postsCount || 0,
+        location: user.profile?.location || user.location || '',
+        website: user.profile?.website || user.website || '',
+        isFollowing: user.isFollowing || false,
+        isFollower: false,
+        mutualFollowers: 0,
+        tags: user.specialties || [],
+        lastActive: user.lastActiveAt || 'Recently',
+        isCreator: user.isCreator || false,
+        creatorLevel: user.creatorLevel || 'gold'
+      }));
+      
+      setSuggestedUsers(suggested);
+    } catch (error) {
+      console.error('Error loading suggested users:', error);
+      // Fallback to empty array
+      setSuggestedUsers([]);
+    }
   };
 
   const performSearch = async () => {
     setSearchLoading(true);
     
-    // Simulate API delay
-    await new Promise(resolve => setTimeout(resolve, 300));
-    
-    const query = searchQuery.toLowerCase();
-    const results = mockUsers.filter(user => 
-      user.id !== currentUser?.id &&
-      (user.username.toLowerCase().includes(query) ||
-       user.displayName.toLowerCase().includes(query) ||
-       user.bio.toLowerCase().includes(query) ||
-       user.tags.some(tag => tag.toLowerCase().includes(query)))
-    ).map(user => ({
-      ...user,
-      isFollowing: following.some(f => f.id === user.id),
-      isFollower: followers.some(f => f.id === user.id)
-    }));
-    
-    setSearchResults(results);
-    setSearchLoading(false);
+    try {
+      // Use real API to search users
+      const response = await usersAPI.searchUsers(searchQuery, {
+        limit: 20,
+        verified: false,
+        creators: false
+      });
+      
+      // Map API response to component format
+      const results = response.users.map((user: any) => ({
+        id: user._id || user.id,
+        username: user.username,
+        displayName: user.displayName,
+        avatar: user.profile?.avatar || user.avatar || '',
+        bio: user.profile?.bio || user.bio || '',
+        isVerified: user.isVerified || false,
+        followerCount: user.socialStats?.followersCount || user.followersCount || 0,
+        followingCount: user.socialStats?.followingCount || user.followingCount || 0,
+        postCount: user.socialStats?.postsCount || user.postsCount || 0,
+        location: user.profile?.location || user.location || '',
+        website: user.profile?.website || user.website || '',
+        isFollowing: user.isFollowing || false,
+        isFollower: false,
+        mutualFollowers: 0,
+        tags: user.specialties || [],
+        lastActive: user.lastActiveAt || 'Recently',
+        isCreator: user.isCreator || false,
+        creatorLevel: user.creatorLevel || 'bronze'
+      }));
+      
+      setSearchResults(results);
+    } catch (error) {
+      console.error('Error searching users:', error);
+      setSearchResults([]);
+    } finally {
+      setSearchLoading(false);
+    }
   };
 
   const handleFollowToggle = async (targetUser: SearchUser) => {

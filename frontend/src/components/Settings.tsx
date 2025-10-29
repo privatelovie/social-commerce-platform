@@ -84,7 +84,7 @@ interface SettingsProps {
 }
 
 const Settings: React.FC<SettingsProps> = ({ onClose }) => {
-  const { user, updateProfile } = useAuth();
+  const { user, updateProfile, logout } = useAuth();
   const { addNotification } = useSocial();
   
   const [currentTab, setCurrentTab] = useState(0);
@@ -358,6 +358,23 @@ const Settings: React.FC<SettingsProps> = ({ onClose }) => {
               <MenuItem value="de">German</MenuItem>
             </Select>
           </FormControl>
+        </ListItem>
+        
+        <Divider sx={{ my: 2 }} />
+        
+        <ListItem>
+          <ListItemIcon><ArrowBack /></ListItemIcon>
+          <ListItemText 
+            primary="Logout" 
+            secondary="Sign out of your account" 
+          />
+          <Button 
+            variant="outlined" 
+            color="error"
+            onClick={logout}
+          >
+            Logout
+          </Button>
         </ListItem>
       </List>
     </Box>
