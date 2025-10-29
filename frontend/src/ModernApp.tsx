@@ -62,6 +62,9 @@ import ExplorePage from './pages/ExplorePage';
 // Services
 import demoRealProducts from './services/demoRealProducts';
 
+// Utils
+import { getProductImage, getUserAvatar } from './utils/productImages';
+
 // Styles
 import './styles/modern.css';
 import './styles/mobile.css';
@@ -75,11 +78,11 @@ const mockSocialPosts = [
       id: '1',
       username: 'fitness_guru_mike',
       displayName: 'Mike Fitness',
-      avatar: 'https://ui-avatars.com/api/?name=Mike+Fitness&background=4CAF50&color=fff&size=100',
+      avatar: getUserAvatar('Mike Fitness'),
       isVerified: true
     },
     content: 'Finally found the perfect home gym setup! 💪🏠 This compact equipment gives me a full-body workout without taking up my entire living room. Game changer for busy schedules! #HomeGym #FitnessMotivation #WorkoutFromHome',
-    media: ['https://picsum.photos/600/400?random=20'],
+    media: [getProductImage('fitness', 0)],
     timestamp: '3 hours ago',
     likes: 956,
     comments: 74,
@@ -92,7 +95,7 @@ const mockSocialPosts = [
       id: '1',
       name: 'Compact Home Gym System',
       price: 399.99,
-      image: 'https://picsum.photos/300/300?random=21',
+      image: getProductImage('fitness', 0),
       description: 'Complete home workout solution in minimal space',
       rating: 4.7,
       reviewCount: 1843,
@@ -106,11 +109,11 @@ const mockSocialPosts = [
       id: '2',
       username: 'coffee_connoisseur_alex',
       displayName: 'Alex Coffee',
-      avatar: 'https://ui-avatars.com/api/?name=Alex+Coffee&background=8BC34A&color=fff&size=100',
+      avatar: getUserAvatar('Alex Coffee'),
       isVerified: false
     },
     content: 'My morning ritual just got an upgrade! ☕️✨ This espresso machine creates café-quality drinks at home. The milk frother is incredible - perfect latte art every time! #CoffeeLovers #LatteArt #MorningRitual',
-    media: ['https://picsum.photos/600/400?random=22', 'https://picsum.photos/600/400?random=23'],
+    media: [getProductImage('home', 0), getProductImage('home', 1)],
     timestamp: '5 hours ago',
     likes: 634,
     comments: 42,
@@ -123,7 +126,7 @@ const mockSocialPosts = [
       id: '2',
       name: 'Professional Espresso Machine',
       price: 599.99,
-      image: 'https://picsum.photos/300/300?random=24',
+      image: getProductImage('home', 2),
       description: 'Barista-quality espresso maker for home use',
       rating: 4.9,
       reviewCount: 567,
@@ -137,11 +140,11 @@ const mockSocialPosts = [
       id: '3',
       username: 'travel_nomad_luna',
       displayName: 'Luna Wanderlust',
-      avatar: 'https://ui-avatars.com/api/?name=Luna+Wanderlust&background=FF9800&color=fff&size=100',
+      avatar: getUserAvatar('Luna Wanderlust'),
       isVerified: true
     },
     content: 'Essential travel gear that actually makes a difference! 🎒✈️ This backpack has saved my back on countless adventures. Smart compartments, weather-resistant, and TSA-friendly. Worth every penny! #TravelGear #DigitalNomad #Backpacking',
-    media: ['https://picsum.photos/600/400?random=25'],
+    media: [getProductImage('fashion', 4)],
     timestamp: '8 hours ago',
     likes: 1123,
     comments: 95,
@@ -154,7 +157,7 @@ const mockSocialPosts = [
       id: '3',
       name: 'Adventure Pro Travel Backpack',
       price: 179.99,
-      image: 'https://picsum.photos/300/300?random=26',
+      image: getProductImage('fashion', 4),
       description: 'Ultimate travel companion for modern nomads',
       rating: 4.8,
       reviewCount: 2156,
