@@ -437,4 +437,92 @@ router.post('/logout', auth, async (req, res) => {
   }
 });
 
+// Search users (for messaging/following)
+router.get('/users/search', auth, async (req, res) => {
+  try {
+    const { q, limit = 10 } = req.query;
+    
+    if (!q || q.trim().length < 2) {
+      return res.status(400).json({
+        error: 'Search query must be at least 2 characters'
+      });
+    }
+
+    const users = await User.find({
+      _id: { $ne: req.user.userId }, // Exclude current user
+      status: 'active',
+      $or: [
+        { username: { $regex: q, $options: 'i' } },
+        { displayName: { $regex: q, $options: 'i' } },
+        { email: { $regex: q, $options: 'i' } }
+      ]
+    })
+    .select('username displayName profile.avatar isVerified socialStats')
+    .limit(parseInt(limit))
+    .lean();
+
+    res.json({
+      users: users.map(user => ({
+        id: user._id,
+        username: user.username,
+        displayName: user.displayName,
+        avatar: user.profile.avatar,
+        isVerified: user.isVerified,
+        followers: user.socialStats?.followers || 0
+      }))
+    });
+  } catch (error) {
+    console.error('Search users error:', error);
+    res.status(500).json({
+      error: 'Server error searching users'
+    });
+  }
+});
+
+// Get all users (for messaging - with pagination)
+router.get('/users', auth, async (req, res) => {
+  try {
+    const { page = 1, limit = 20 } = req.query;
+    const skip = (parseInt(page) - 1) * parseInt(limit);
+
+    const users = await User.find({
+      _id: { $ne: req.user.userId }, // Exclude current user
+      status: 'active'
+    })
+    .select('username displayName profile.avatar isVerified lastActiveAt')
+    .sort({ lastActiveAt: -1 }) // Most recently active first
+    .skip(skip)
+    .limit(parseInt(limit))
+    .lean();
+
+    const total = await User.countDocuments({
+      _id: { $ne: req.user.userId },
+      status: 'active'
+    });
+
+    res.json({
+      users: users.map(user => ({
+        id: user._id,
+        username: user.username,
+        displayName: user.displayName,
+        avatar: user.profile.avatar,
+        isVerified: user.isVerified,
+        isOnline: user.lastActiveAt && (new Date() - new Date(user.lastActiveAt)) < 5 * 60 * 1000, // Online if active in last 5 min
+        lastSeen: user.lastActiveAt
+      })),
+      pagination: {
+        page: parseInt(page),
+        limit: parseInt(limit),
+        total,
+        totalPages: Math.ceil(total / parseInt(limit))
+      }
+    });
+  } catch (error) {
+    console.error('Get users error:', error);
+    res.status(500).json({
+      error: 'Server error fetching users'
+    });
+  }
+});
+
 module.exports = router;
