@@ -353,9 +353,9 @@ const AuthModal: React.FC<{
             sx={{
               py: 1.5,
               mb: 2,
-              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+              background: 'linear-gradient(135deg, #1976d2 0%, #115293 100%)',
               '&:hover': {
-                background: 'linear-gradient(135deg, #5a67d8 0%, #6b5b95 100%)',
+                background: 'linear-gradient(135deg, #115293 0%, #0d3c6b 100%)',
               },
             }}
           >
@@ -403,6 +403,7 @@ const AppContent: React.FC = () => {
   const [posts, setPosts] = useState(mockSocialPosts);
   const [authModalOpen, setAuthModalOpen] = useState(false);
   const [authModalType, setAuthModalType] = useState<'login' | 'register'>('login');
+  const [searchQuery, setSearchQuery] = useState('');
   const [selectedPost, setSelectedPost] = useState<any>(null);
   const [commentsOpen, setCommentsOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
@@ -508,7 +509,7 @@ const AppContent: React.FC = () => {
           flexDirection: 'column',
           alignItems: 'center',
           justifyContent: 'center',
-          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+          background: 'linear-gradient(135deg, #1976d2 0%, #115293 100%)',
           p: 3,
         }}
       >
@@ -546,7 +547,7 @@ const AppContent: React.FC = () => {
                 sx={{
                   px: 4,
                   py: 1.5,
-                  background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                  background: 'linear-gradient(135deg, #1976d2 0%, #115293 100%)',
                 }}
               >
                 Sign In
@@ -591,8 +592,8 @@ const AppContent: React.FC = () => {
         currentUser={user!}
         currentView={currentView}
         onViewChange={setCurrentView}
-        searchQuery=""
-        onSearchChange={handleSearch}
+        searchQuery={searchQuery}
+        onSearchChange={setSearchQuery}
         cartItemsCount={cartState.totalItems}
         wishlistCount={favoritesState.totalItems}
         notificationsCount={0}

@@ -52,14 +52,14 @@ export const CustomThemeProvider: React.FC<CustomThemeProviderProps> = ({ childr
     palette: {
       mode,
       primary: {
-        main: '#667eea',
-        dark: '#5a67d8',
-        light: '#7c87f0',
+        main: '#1976d2', // Professional blue
+        dark: '#115293',
+        light: '#42a5f5',
       },
       secondary: {
-        main: '#764ba2',
-        dark: '#6b5b95',
-        light: '#9b6ec9',
+        main: '#424242', // Neutral gray
+        dark: '#212121',
+        light: '#616161',
       },
       background: {
         default: mode === 'light' ? '#f8fafc' : '#0f0f0f',
