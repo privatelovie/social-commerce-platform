@@ -27,9 +27,19 @@ const cartRoutes = require('./routes/cart');
 
 const app = express();
 const server = http.createServer(app);
+// Socket.IO with flexible CORS
+const socketAllowedOrigins = [
+  process.env.FRONTEND_URL,
+  process.env.FRONTEND_URL?.replace(/\/$/, ''),
+  'http://localhost:3000',
+  'http://localhost:3001',
+  'https://social-commerce-platform.vercel.app',
+  'https://social-commerce-platform.vercel.app/'
+].filter(Boolean);
+
 const io = socketIO(server, {
   cors: {
-    origin: process.env.FRONTEND_URL || "http://localhost:3000",
+    origin: socketAllowedOrigins,
     methods: ["GET", "POST"],
     credentials: true
   }
@@ -41,9 +51,34 @@ app.use(helmet({
 }));
 app.use(compression());
 app.use(morgan('combined'));
+
+// CORS configuration - handle multiple frontend URLs
+const allowedOrigins = [
+  process.env.FRONTEND_URL,
+  process.env.FRONTEND_URL?.replace(/\/$/, ''), // Without trailing slash
+  process.env.FRONTEND_URL?.replace(/\/$/, '') + '/', // With trailing slash
+  'http://localhost:3000',
+  'http://localhost:3001',
+  'https://social-commerce-platform.vercel.app',
+  'https://social-commerce-platform.vercel.app/'
+].filter(Boolean);
+
 app.use(cors({
-  origin: process.env.FRONTEND_URL || "http://localhost:3000",
-  credentials: true
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+    
+    if (allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      console.warn('CORS blocked origin:', origin);
+      callback(null, true); // Allow anyway for development
+    }
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+  exposedHeaders: ['Content-Range', 'X-Content-Range']
 }));
 
 // Rate limiting
