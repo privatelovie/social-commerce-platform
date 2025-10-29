@@ -47,6 +47,7 @@ export const endpoints = {
   // Authentication
   auth: {
     login: '/auth/login',
+    googleLogin: '/auth/google',
     register: '/auth/register',
     logout: '/auth/logout',
     refresh: '/auth/refresh',

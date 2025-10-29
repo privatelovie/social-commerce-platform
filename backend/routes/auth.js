@@ -2,8 +2,11 @@ const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const rateLimit = require('express-rate-limit');
+const { OAuth2Client } = require('google-auth-library');
 const User = require('../models/User');
 const { auth } = require('../middleware/auth');
+
+const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 const router = express.Router();
 
@@ -79,6 +82,109 @@ router.post('/register', authLimiter, async (req, res) => {
     console.error('Registration error:', error);
     res.status(500).json({
       error: 'Server error during registration'
+    });
+  }
+});
+
+// Google OAuth Login
+router.post('/google', authLimiter, async (req, res) => {
+  try {
+    const { token } = req.body;
+
+    if (!token) {
+      return res.status(400).json({
+        error: 'Google token is required'
+      });
+    }
+
+    // Verify Google token
+    let ticket;
+    try {
+      ticket = await googleClient.verifyIdToken({
+        idToken: token,
+        audience: process.env.GOOGLE_CLIENT_ID,
+      });
+    } catch (verifyError) {
+      console.error('Google token verification failed:', verifyError);
+      return res.status(401).json({
+        error: 'Invalid Google token'
+      });
+    }
+
+    const payload = ticket.getPayload();
+    const googleId = payload['sub'];
+    const email = payload['email'];
+    const displayName = payload['name'];
+    const avatar = payload['picture'];
+    const emailVerified = payload['email_verified'];
+
+    // Find or create user
+    let user = await User.findOne({ email });
+
+    if (!user) {
+      // Create new user from Google account
+      const username = email.split('@')[0] + '_' + Math.random().toString(36).substr(2, 5);
+      
+      user = new User({
+        username,
+        email,
+        displayName,
+        googleId,
+        isVerified: emailVerified,
+        profile: {
+          bio: '',
+          location: '',
+          website: '',
+          avatar: avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(displayName)}&background=667eea&color=fff&size=200`
+        },
+        password: Math.random().toString(36).substr(2, 20) // Random password for OAuth users
+      });
+
+      await user.save();
+    } else {
+      // Update existing user with Google ID if not set
+      if (!user.googleId) {
+        user.googleId = googleId;
+      }
+      
+      // Update last login
+      user.lastLoginAt = new Date();
+      user.lastActiveAt = new Date();
+      await user.save();
+    }
+
+    // Check if account is active
+    if (user.status !== 'active') {
+      return res.status(403).json({
+        error: 'Account is not active'
+      });
+    }
+
+    // Generate JWT token
+    const jwtToken = jwt.sign(
+      { userId: user._id },
+      process.env.JWT_SECRET,
+      { expiresIn: '7d' }
+    );
+
+    res.json({
+      message: 'Google login successful',
+      token: jwtToken,
+      user: {
+        id: user._id,
+        username: user.username,
+        email: user.email,
+        displayName: user.displayName,
+        avatar: user.profile.avatar,
+        isVerified: user.isVerified,
+        isCreator: user.isCreator,
+        socialStats: user.socialStats
+      }
+    });
+  } catch (error) {
+    console.error('Google login error:', error);
+    res.status(500).json({
+      error: 'Server error during Google login'
     });
   }
 });

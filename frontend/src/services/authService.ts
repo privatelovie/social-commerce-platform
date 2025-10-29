@@ -130,6 +130,35 @@ class AuthService {
     }
   }
 
+  async googleLogin(token: string): Promise<{ success: boolean; user?: User; error?: string }> {
+    try {
+      const response: ApiResponse<AuthResponse> = await apiClient.post(
+        endpoints.auth.googleLogin,
+        { token }
+      );
+
+      if (response.success && response.data) {
+        this.storeAuth(response.data);
+        
+        return {
+          success: true,
+          user: response.data.user,
+        };
+      } else {
+        return {
+          success: false,
+          error: response.error || 'Google login failed',
+        };
+      }
+    } catch (error: any) {
+      console.error('Google login error:', error);
+      return {
+        success: false,
+        error: error.message || 'Google login failed',
+      };
+    }
+  }
+
   async register(userData: RegisterData): Promise<{ success: boolean; user?: User; error?: string }> {
     try {
       const response: ApiResponse<AuthResponse> = await apiClient.post(

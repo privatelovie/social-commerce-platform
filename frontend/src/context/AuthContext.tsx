@@ -44,6 +44,7 @@ interface AuthContextType {
   user: User | null;
   isAuthenticated: boolean;
   login: (email: string, password: string) => Promise<boolean>;
+  loginWithGoogle: (token: string) => Promise<boolean>;
   register: (userData: RegisterData) => Promise<boolean>;
   logout: () => void;
   updateProfile: (updates: Partial<User>) => Promise<boolean>;
@@ -198,6 +199,34 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     }
   };
 
+  const loginWithGoogle = async (token: string): Promise<boolean> => {
+    try {
+      setLoading(true);
+      setError(null);
+
+      const response = await authService.googleLogin(token);
+      
+      if (response.success && response.user) {
+        const mappedUser = mapUserData(response.user);
+        setUser(mappedUser);
+        
+        // Initialize Socket.IO connection
+        initializeSocket(response.user.id);
+        
+        return true;
+      } else {
+        setError(response.error || 'Google login failed. Please try again.');
+        return false;
+      }
+    } catch (err: any) {
+      console.error('Google login error:', err);
+      setError(err.message || 'Google login failed. Please try again.');
+      return false;
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const register = async (userData: RegisterData): Promise<boolean> => {
     try {
       setLoading(true);
@@ -283,6 +312,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     user,
     isAuthenticated: !!user,
     login,
+    loginWithGoogle,
     register,
     logout,
     updateProfile,

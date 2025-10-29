@@ -44,7 +44,6 @@ import CartDrawer from './components/CartDrawer';
 import AIGuide from './components/AIGuide';
 import VideoReelsPage from './pages/VideoReelsPage';
 import MessagingPage from './pages/MessagingPage';
-// import DemoLauncher from './components/DemoLauncher'; // Removed
 import DirectMessages from './components/DirectMessages';
 import EnhancedProfile from './components/EnhancedProfile';
 import AnalyticsDashboard from './components/AnalyticsDashboard';
@@ -54,6 +53,8 @@ import ProductPage from './components/ProductPage';
 import UserSearch from './components/UserSearch';
 import HashtagExplorer from './components/HashtagExplorer';
 import ProfileEditor from './components/ProfileEditor';
+import GoogleAuthProviderWrapper from './components/GoogleAuthProvider';
+import GoogleLoginButton from './components/GoogleLoginButton';
 
 // Pages
 import ExplorePage from './pages/ExplorePage';
@@ -240,6 +241,7 @@ const AuthModal: React.FC<{
   const [password, setPassword] = useState('');
   const [username, setUsername] = useState('');
   const [displayName, setDisplayName] = useState('');
+  const [authError, setAuthError] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -336,9 +338,9 @@ const AuthModal: React.FC<{
             }}
           />
           
-          {error && (
+          {(error || authError) && (
             <Alert severity="error" sx={{ mb: 2 }}>
-              {error}
+              {error || authError}
             </Alert>
           )}
           
@@ -359,6 +361,21 @@ const AuthModal: React.FC<{
           >
             {loading ? 'Loading...' : type === 'login' ? 'Sign In' : 'Create Account'}
           </Button>
+          
+          {type === 'login' && (
+            <>
+              <Box sx={{ display: 'flex', alignItems: 'center', my: 2 }}>
+                <Box sx={{ flex: 1, borderBottom: '1px solid #e2e8f0' }} />
+                <Typography sx={{ mx: 2, color: 'text.secondary' }}>or</Typography>
+                <Box sx={{ flex: 1, borderBottom: '1px solid #e2e8f0' }} />
+              </Box>
+              
+              <GoogleLoginButton
+                onSuccess={onClose}
+                onError={(error) => setAuthError(error)}
+              />
+            </>
+          )}
           
           <Button
             variant="text"
@@ -884,29 +901,31 @@ const AppContent: React.FC = () => {
 const ModernApp: React.FC = () => {
   return (
     <ErrorBoundary level="page">
-      <QueryClientProvider client={queryClient}>
-        <CustomThemeProvider>
-          <AuthProvider>
-            <SocialProvider>
-              <CartProvider>
-                <FavoritesProvider>
-                  <ToastProvider>
-                    <Router>
-                      <ErrorBoundary level="section">
-                        <AppContent />
-                      </ErrorBoundary>
-                    </Router>
-                  </ToastProvider>
-                </FavoritesProvider>
-              </CartProvider>
-            </SocialProvider>
-          </AuthProvider>
-        </CustomThemeProvider>
-        {/* React Query DevTools - only in development */}
-        {process.env.NODE_ENV === 'development' && (
-          <ReactQueryDevtools initialIsOpen={false} />
-        )}
-      </QueryClientProvider>
+      <GoogleAuthProviderWrapper>
+        <QueryClientProvider client={queryClient}>
+          <CustomThemeProvider>
+            <AuthProvider>
+              <SocialProvider>
+                <CartProvider>
+                  <FavoritesProvider>
+                    <ToastProvider>
+                      <Router>
+                        <ErrorBoundary level="section">
+                          <AppContent />
+                        </ErrorBoundary>
+                      </Router>
+                    </ToastProvider>
+                  </FavoritesProvider>
+                </CartProvider>
+              </SocialProvider>
+            </AuthProvider>
+          </CustomThemeProvider>
+          {/* React Query DevTools - only in development */}
+          {process.env.NODE_ENV === 'development' && (
+            <ReactQueryDevtools initialIsOpen={false} />
+          )}
+        </QueryClientProvider>
+      </GoogleAuthProviderWrapper>
     </ErrorBoundary>
   );
 };
