@@ -302,7 +302,7 @@ const Navigation: React.FC<NavigationProps> = ({
                 fontWeight: 800,
                 mr: 4,
                 fontSize: { xs: '1.4rem', md: '1.8rem' },
-                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                background: 'linear-gradient(135deg, #1976d2 0%, #115293 100%)',
                 backgroundClip: 'text',
                 WebkitBackgroundClip: 'text',
                 WebkitTextFillColor: 'transparent',
@@ -342,14 +342,14 @@ const Navigation: React.FC<NavigationProps> = ({
                   transition: 'all 0.2s ease-in-out',
                   '&:hover': {
                     background: 'rgba(255, 255, 255, 1)',
-                    border: '1px solid rgba(102, 126, 234, 0.3)',
+                    border: '1px solid rgba(25, 118, 210, 0.3)',
                     transform: 'translateY(-1px)',
                     boxShadow: '0 4px 12px rgba(0, 0, 0, 0.05)'
                   },
                   '&.Mui-focused': {
                     background: 'rgba(255, 255, 255, 1)',
-                    border: '1px solid #667eea',
-                    boxShadow: '0 0 0 3px rgba(102, 126, 234, 0.1)'
+                    border: '1px solid #1976d2',
+                    boxShadow: '0 0 0 3px rgba(25, 118, 210, 0.1)'
                   }
                 },
                 '& .MuiOutlinedInput-input': {
@@ -359,7 +359,7 @@ const Navigation: React.FC<NavigationProps> = ({
                 }
               }}
               InputProps={{
-                startAdornment: <SearchIcon sx={{ color: '#667eea', mr: 1, ml: 1, fontSize: 20 }} />,
+                startAdornment: <SearchIcon sx={{ color: '#1976d2', mr: 1, ml: 1, fontSize: 20 }} />,
               }}
             />
             
@@ -368,20 +368,33 @@ const Navigation: React.FC<NavigationProps> = ({
               open={searchOpen && (searchResults.length > 0 || searchQuery.length > 0)}
               anchorEl={anchorEl}
               placement="bottom-start"
-              style={{ zIndex: 1300, width: anchorEl?.clientWidth }}
+              style={{ 
+                zIndex: 1400, 
+                width: anchorEl?.clientWidth,
+                marginTop: '8px'
+              }}
               transition
+              modifiers={[
+                {
+                  name: 'offset',
+                  options: {
+                    offset: [0, 8],
+                  },
+                },
+              ]}
             >
               {({ TransitionProps }) => (
                 <Fade {...TransitionProps} timeout={200}>
                   <Paper 
-                    elevation={8}
+                    elevation={12}
                     sx={{ 
-                      borderRadius: '12px',
+                      borderRadius: '16px',
                       overflow: 'hidden',
-                      mt: 1,
-                      maxHeight: '400px',
+                      maxHeight: '500px',
                       overflowY: 'auto',
-                      border: '1px solid rgba(0,0,0,0.1)'
+                      border: '1px solid rgba(0,0,0,0.1)',
+                      boxShadow: '0 8px 32px rgba(0,0,0,0.15)',
+                      background: 'white'
                     }}
                   >
                     <List sx={{ p: 0 }}>
@@ -411,7 +424,7 @@ const Navigation: React.FC<NavigationProps> = ({
                                     title: search,
                                     subtitle: 'Recent search'
                                   })}
-                                  sx={{ py: 1, '&:hover': { background: 'rgba(102, 126, 234, 0.05)' }, cursor: 'pointer' }}
+                                  sx={{ py: 1, '&:hover': { background: 'rgba(25, 118, 210, 0.05)' }, cursor: 'pointer' }}
                                 >
                                   <ListItemAvatar>
                                     <History color="action" />
@@ -445,7 +458,7 @@ const Navigation: React.FC<NavigationProps> = ({
                                     image: product.image,
                                     data: product
                                   })}
-                                  sx={{ py: 1, '&:hover': { background: 'rgba(102, 126, 234, 0.05)' }, cursor: 'pointer' }}
+                                  sx={{ py: 1, '&:hover': { background: 'rgba(25, 118, 210, 0.05)' }, cursor: 'pointer' }}
                                 >
                                   <ListItemAvatar>
                                     <Avatar src={product.image} sx={{ width: 32, height: 32 }} />
@@ -473,7 +486,7 @@ const Navigation: React.FC<NavigationProps> = ({
                           <ListItem 
                             key={result.id}
                             onClick={() => handleSearchClick(result)}
-                            sx={{ py: 1, '&:hover': { background: 'rgba(102, 126, 234, 0.05)' }, cursor: 'pointer' }}
+                            sx={{ py: 1, '&:hover': { background: 'rgba(25, 118, 210, 0.05)' }, cursor: 'pointer' }}
                           >
                             <ListItemAvatar>
                               {result.type === 'product' ? (
@@ -541,12 +554,12 @@ const Navigation: React.FC<NavigationProps> = ({
                   borderRadius: '12px',
                   px: 2,
                   py: 1,
-                  color: currentView === key ? '#667eea' : '#64748b',
-                  background: currentView === key ? 'rgba(102, 126, 234, 0.1)' : 'transparent',
+                  color: currentView === key ? '#1976d2' : '#64748b',
+                  background: currentView === key ? 'rgba(25, 118, 210, 0.1)' : 'transparent',
                   fontWeight: currentView === key ? 600 : 500,
                   textTransform: 'none',
                   '&:hover': {
-                    background: currentView === key ? 'rgba(102, 126, 234, 0.15)' : 'rgba(100, 116, 139, 0.08)'
+                    background: currentView === key ? 'rgba(25, 118, 210, 0.15)' : 'rgba(100, 116, 139, 0.08)'
                   }
                 }}
               >
@@ -565,14 +578,14 @@ const Navigation: React.FC<NavigationProps> = ({
               sx={{
                 display: { xs: 'none', sm: 'flex' },
                 borderRadius: '12px',
-                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                background: 'linear-gradient(135deg, #1976d2 0%, #115293 100%)',
                 px: 2,
                 py: 1,
                 fontWeight: 600,
                 textTransform: 'none',
-                boxShadow: '0 2px 8px rgba(102, 126, 234, 0.3)',
+                boxShadow: '0 2px 8px rgba(25, 118, 210, 0.3)',
                 '&:hover': {
-                  background: 'linear-gradient(135deg, #5a67d8 0%, #6b5b95 100%)',
+                  background: 'linear-gradient(135deg, #115293 0%, #0d3c6b 100%)',
                   transform: 'translateY(-1px)',
                   boxShadow: '0 4px 12px rgba(102, 126, 234, 0.4)'
                 }
