@@ -14,7 +14,7 @@ import {
   Divider,
   Card,
   CardContent,
-  Grid2 as Grid,
+  Grid,
   IconButton,
   Collapse,
   TextField

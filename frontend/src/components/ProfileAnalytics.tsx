@@ -9,7 +9,7 @@ import {
   Card,
   CardMedia,
   CardContent,
-  Grid2 as Grid,
+  Grid,
   IconButton,
   Avatar,
   Chip,
@@ -163,7 +163,7 @@ const ProfileAnalytics: React.FC = () => {
       {
         id: 'c3',
         postId: 'p3',
-        content: 'This is exactly what I\\'ve been looking for! Thanks for sharing',
+        content: 'This is exactly what I\'ve been looking for! Thanks for sharing',
         postImage: 'https://images.unsplash.com/photo-1434389677669-e08b4cac3105?w=400&h=400&fit=crop',
         postAuthor: 'fashion_finder',
         commentedAt: new Date(Date.now() - 172800000),
