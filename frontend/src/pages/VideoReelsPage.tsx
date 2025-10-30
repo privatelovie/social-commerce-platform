@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Box, CircularProgress, Alert, Typography } from '@mui/material';
+import { Box, CircularProgress, Alert, Typography, Fab, Tooltip } from '@mui/material';
+import { Add as AddIcon } from '@mui/icons-material';
 import VideoReels from '../components/VideoReels';
+import ReelUpload from '../components/ReelUpload';
 import { useCart } from '../context/CartContext';
 import { useFavorites } from '../context/FavoritesContext';
 import { useAuth } from '../context/AuthContext';
@@ -46,6 +48,7 @@ const VideoReelsPage: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [hasMore, setHasMore] = useState(true);
   const [page, setPage] = useState(1);
+  const [uploadOpen, setUploadOpen] = useState(false);
   
   const { addItem: addToCart } = useCart();
   const { toggleFavorite } = useFavorites();
@@ -435,6 +438,29 @@ const VideoReelsPage: React.FC = () => {
     }
   };
 
+  const handleReelUpload = (reelData: any) => {
+    // Add the new reel to the top of the feed
+    const newVideoData: VideoReelData = {
+      id: reelData.id,
+      videoUrl: reelData.videoUrl,
+      thumbnailUrl: reelData.thumbnailUrl,
+      title: reelData.title,
+      description: reelData.description,
+      creator: reelData.creator,
+      stats: reelData.stats,
+      product: reelData.product,
+      hashtags: reelData.hashtags,
+      isLiked: reelData.isLiked,
+      duration: reelData.duration,
+      createdAt: reelData.createdAt
+    };
+
+    setVideos(prev => [newVideoData, ...prev]);
+    
+    // Show success message
+    alert('Reel uploaded successfully! 🎉');
+  };
+
   if (loading) {
     return (
       <Box 
@@ -487,15 +513,49 @@ const VideoReelsPage: React.FC = () => {
   }
 
   return (
-    <VideoReels
-      videos={videos}
-      onLike={handleLike}
-      onShare={handleShare}
-      onComment={handleComment}
-      onAddToCart={handleAddToCart}
-      onProductClick={handleProductClick}
-      onFollow={handleFollow}
-    />
+    <>
+      <VideoReels
+        videos={videos}
+        onLike={handleLike}
+        onShare={handleShare}
+        onComment={handleComment}
+        onAddToCart={handleAddToCart}
+        onProductClick={handleProductClick}
+        onFollow={handleFollow}
+      />
+
+      {/* Floating Action Button for Upload */}
+      {isAuthenticated && (
+        <Tooltip title="Upload Reel" placement="left">
+          <Fab
+            color="primary"
+            onClick={() => setUploadOpen(true)}
+            sx={{
+              position: 'fixed',
+              bottom: { xs: 80, md: 32 },
+              right: { xs: 16, md: 32 },
+              zIndex: 1000,
+              background: 'linear-gradient(135deg, #1976d2 0%, #115293 100%)',
+              '&:hover': {
+                background: 'linear-gradient(135deg, #115293 0%, #0d3c6b 100%)',
+                transform: 'scale(1.1)',
+              },
+              transition: 'all 0.3s ease',
+              boxShadow: '0 8px 32px rgba(25, 118, 210, 0.4)'
+            }}
+          >
+            <AddIcon sx={{ fontSize: 32 }} />
+          </Fab>
+        </Tooltip>
+      )}
+
+      {/* Reel Upload Dialog */}
+      <ReelUpload
+        open={uploadOpen}
+        onClose={() => setUploadOpen(false)}
+        onUpload={handleReelUpload}
+      />
+    </>
   );
 };
 
