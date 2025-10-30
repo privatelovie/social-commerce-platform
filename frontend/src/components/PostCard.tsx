@@ -49,6 +49,7 @@ import {
 import { motion, AnimatePresence } from 'framer-motion';
 import demoProductService from '../services/demoRealProducts';
 import { RealProduct, ProductReview } from '../services/productApi';
+import { parseHashtags } from './HashtagLink';
 
 interface PostCardProps {
   post: any;
@@ -284,10 +285,13 @@ const PostCard: React.FC<PostCardProps> = ({
               lineHeight: 1.6,
               fontSize: '15px',
               fontWeight: 400,
-              color: '#1a202c'
+              color: 'text.primary'
             }}
           >
-            {post.content}
+            {parseHashtags(post.content, (tag) => {
+              console.log('Clicked hashtag:', tag);
+              // Could trigger search/explore view with this hashtag
+            })}
           </Typography>
           
           {/* AI Generated Badge */}

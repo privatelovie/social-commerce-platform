@@ -6,6 +6,7 @@ import {
   Typography,
   List,
   ListItem,
+  ListItemButton,
   ListItemAvatar,
   ListItemText,
   Avatar,
@@ -519,18 +520,20 @@ const MessagingPage: React.FC<MessagingPageProps> = () => {
                 return (
                   <ListItem
                     key={conversation.id}
-                    button
-                    selected={isSelected}
-                    onClick={() => loadConversation(conversation)}
-                    sx={{
-                      borderRadius: 2,
-                      mx: 1,
-                      mb: 0.5,
-                      '&.Mui-selected': {
-                        bgcolor: 'primary.lighter',
-                      },
-                    }}
+                    disablePadding
                   >
+                    <ListItemButton
+                      selected={isSelected}
+                      onClick={() => loadConversation(conversation)}
+                      sx={{
+                        borderRadius: 2,
+                        mx: 1,
+                        mb: 0.5,
+                        '&.Mui-selected': {
+                          bgcolor: 'primary.lighter',
+                        },
+                      }}
+                    >
                     <ListItemAvatar>
                       <Badge
                         variant="dot"
@@ -587,6 +590,7 @@ const MessagingPage: React.FC<MessagingPageProps> = () => {
                         </Box>
                       }
                     />
+                    </ListItemButton>
                   </ListItem>
                 );
               })}

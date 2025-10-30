@@ -3,7 +3,7 @@ import {
   Box,
   Container,
   Typography,
-  Grid,
+  Grid2,
   Card,
   CardMedia,
   CardContent,
@@ -124,9 +124,9 @@ const SavedPostsPage: React.FC = () => {
           No saved {filter === 'all' ? 'items' : filter} yet. Start bookmarking content you love!
         </Alert>
       ) : (
-        <Grid container spacing={2}>
+        <Grid2 container spacing={2}>
           {filteredPosts.map((item) => (
-            <Grid key={item.id} xs={12} sm={6} md={4}>
+            <Grid2 key={item.id} size={{ xs: 12, sm: 6, md: 4 }}>
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -206,9 +206,9 @@ const SavedPostsPage: React.FC = () => {
                   </CardContent>
                 </Card>
               </motion.div>
-            </Grid>
+            </Grid2>
           ))}
-        </Grid>
+        </Grid2>
       )}
     </Container>
   );

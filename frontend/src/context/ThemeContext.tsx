@@ -25,13 +25,16 @@ interface CustomThemeProviderProps {
 }
 
 export const CustomThemeProvider: React.FC<CustomThemeProviderProps> = ({ children }) => {
-  const [mode, setMode] = useState<ThemeMode>('light');
+  const [mode, setMode] = useState<ThemeMode>('dark');
 
   // Load theme preference from localStorage on mount
   useEffect(() => {
     const savedTheme = localStorage.getItem('social_commerce_theme') as ThemeMode;
     if (savedTheme && (savedTheme === 'light' || savedTheme === 'dark')) {
       setMode(savedTheme);
+    } else {
+      // Set default to dark if no preference saved
+      setMode('dark');
     }
   }, []);
 

@@ -448,7 +448,7 @@ export const useInfiniteProducts = (
   return useInfiniteQuery({
     queryKey: queryKeys.product.search(filters),
     queryFn: ({ pageParam = 1 }) => 
-      productService.searchProducts({ ...filters, page: pageParam }),
+      productService.searchProducts({ ...filters, page: pageParam as number }),
     initialPageParam: 1,
     getNextPageParam: (lastPage, pages) => {
       if (lastPage?.result?.hasMore) {
@@ -464,7 +464,7 @@ export const useInfiniteProducts = (
 export const useInfiniteOrders = (options?: InfiniteQueryOptions<any>) => {
   return useInfiniteQuery({
     queryKey: queryKeys.order.list(),
-    queryFn: ({ pageParam = 1 }) => cartService.getOrders(pageParam),
+    queryFn: ({ pageParam = 1 }) => cartService.getOrders(pageParam as number),
     initialPageParam: 1,
     getNextPageParam: (lastPage, pages) => {
       if (lastPage?.hasMore) {

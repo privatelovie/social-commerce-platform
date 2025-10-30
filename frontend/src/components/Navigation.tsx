@@ -103,12 +103,15 @@ const Navigation: React.FC<NavigationProps> = ({
   const handleLogout = async () => {
     try {
       await authAPI.logout();
-      // Redirect to login page
-      window.location.href = '/login';
+      // Clear all local storage
+      localStorage.clear();
+      // Force reload to reset app state and show landing page
+      window.location.href = '/';
     } catch (error) {
       console.error('Logout error:', error);
-      // Still redirect even if API call fails
-      window.location.href = '/login';
+      // Still clear storage and redirect even if API call fails
+      localStorage.clear();
+      window.location.href = '/';
     }
   };
   

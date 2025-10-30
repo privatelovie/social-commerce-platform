@@ -220,33 +220,57 @@ export type RefundStatus =
   | 'rejected';
 
 // Response types
-interface CartResponse extends ApiResponse {
+interface CartResponse {
+  success: boolean;
   cart?: Cart;
+  data?: any;
+  error?: string;
+  message?: string;
 }
 
-interface CouponResponse extends ApiResponse {
+interface CouponResponse {
+  success: boolean;
   coupon?: Coupon;
   discount?: number;
+  data?: any;
+  error?: string;
+  message?: string;
 }
 
-interface ShippingResponse extends ApiResponse {
+interface ShippingResponse {
+  success: boolean;
   options?: ShippingOption[];
+  data?: any;
+  error?: string;
+  message?: string;
 }
 
-interface CheckoutResponse extends ApiResponse {
+interface CheckoutResponse {
+  success: boolean;
   order?: Order;
   paymentIntent?: string;
   clientSecret?: string;
+  data?: any;
+  error?: string;
+  message?: string;
 }
 
-interface OrderResponse extends ApiResponse {
+interface OrderResponse {
+  success: boolean;
   order?: Order;
+  data?: any;
+  error?: string;
+  message?: string;
 }
 
-interface OrderListResponse extends ApiResponse {
+interface OrderListResponse {
+  success: boolean;
   orders?: Order[];
   totalCount?: number;
   hasMore?: boolean;
+  data?: any;
+  error?: string;
+  message?: string;
 }
 
 class CartService extends EventEmitter {
@@ -279,6 +303,7 @@ class CartService extends EventEmitter {
       
       return {
         success: false,
+        data: null,
         error: error.response?.data?.error || error.message || 'Failed to fetch cart'
       };
     }
@@ -322,6 +347,7 @@ class CartService extends EventEmitter {
       
       return {
         success: false,
+        data: null,
         error: error.response?.data?.error || error.message || 'Failed to add item to cart'
       };
     }
@@ -356,6 +382,7 @@ class CartService extends EventEmitter {
       
       return {
         success: false,
+        data: null,
         error: error.response?.data?.error || error.message || 'Failed to update cart item'
       };
     }
@@ -386,6 +413,7 @@ class CartService extends EventEmitter {
       
       return {
         success: false,
+        data: null,
         error: error.response?.data?.error || error.message || 'Failed to remove item from cart'
       };
     }
@@ -406,6 +434,7 @@ class CartService extends EventEmitter {
     } catch (error: any) {
       return {
         success: false,
+        data: null,
         error: error.response?.data?.error || error.message || 'Failed to clear cart'
       };
     }
@@ -427,6 +456,7 @@ class CartService extends EventEmitter {
     } catch (error: any) {
       return {
         success: false,
+        data: null,
         error: error.response?.data?.error || error.message || 'Failed to save item for later'
       };
     }
@@ -447,6 +477,7 @@ class CartService extends EventEmitter {
     } catch (error: any) {
       return {
         success: false,
+        data: null,
         error: error.response?.data?.error || error.message || 'Failed to move item to cart'
       };
     }
@@ -486,6 +517,7 @@ class CartService extends EventEmitter {
     } catch (error: any) {
       return {
         success: false,
+        data: null,
         error: error.response?.data?.error || error.message || 'Failed to remove coupon'
       };
     }
@@ -519,6 +551,7 @@ class CartService extends EventEmitter {
     } catch (error: any) {
       return {
         success: false,
+        data: null,
         error: error.response?.data?.error || error.message || 'Failed to select shipping option'
       };
     }
@@ -619,6 +652,7 @@ class CartService extends EventEmitter {
     } catch (error: any) {
       return {
         success: false,
+        data: null,
         error: error.response?.data?.error || error.message || 'Failed to move wishlist item to cart'
       };
     }

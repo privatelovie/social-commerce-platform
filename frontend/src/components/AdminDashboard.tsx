@@ -6,7 +6,7 @@ import {
   Typography,
   Card,
   CardContent,
-  Grid,
+  Grid2,
   Tab,
   Tabs,
   Table,
@@ -255,8 +255,8 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
           </Alert>
 
           {/* Stats Cards */}
-          <Grid container spacing={3} sx={{ mb: 4 }}>
-            <Grid xs={12} sm={6} md={3}>
+          <Grid2 container spacing={3} sx={{ mb: 4 }}>
+            <Grid2 size={{ xs: 12, sm: 6, md: 3 }}>
               <Card>
                 <CardContent>
                   <Box display="flex" alignItems="center" justifyContent="space-between">
@@ -278,9 +278,9 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
                   </Box>
                 </CardContent>
               </Card>
-            </Grid>
+            </Grid2>
 
-            <Grid xs={12} sm={6} md={3}>
+            <Grid2 size={{ xs: 12, sm: 6, md: 3 }}>
               <Card>
                 <CardContent>
                   <Box display="flex" alignItems="center" justifyContent="space-between">
@@ -302,9 +302,9 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
                   </Box>
                 </CardContent>
               </Card>
-            </Grid>
+            </Grid2>
 
-            <Grid xs={12} sm={6} md={3}>
+            <Grid2 size={{ xs: 12, sm: 6, md: 3 }}>
               <Card>
                 <CardContent>
                   <Box display="flex" alignItems="center" justifyContent="space-between">
@@ -326,9 +326,9 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
                   </Box>
                 </CardContent>
               </Card>
-            </Grid>
+            </Grid2>
 
-            <Grid xs={12} sm={6} md={3}>
+            <Grid2 size={{ xs: 12, sm: 6, md: 3 }}>
               <Card>
                 <CardContent>
                   <Box display="flex" alignItems="center" justifyContent="space-between">
@@ -349,8 +349,8 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
                   </Box>
                 </CardContent>
               </Card>
-            </Grid>
-          </Grid>
+            </Grid2>
+          </Grid2>
 
           {/* Quick Actions */}
           <Paper sx={{ p: 3 }}>
@@ -483,7 +483,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
               <TableBody>
                 {orders.map((order) => (
                   <TableRow key={order.id}>
-                    <TableCell fontWeight="medium">{order.orderNumber}</TableCell>
+                    <TableCell sx={{ fontWeight: 'medium' }}>{order.orderNumber}</TableCell>
                     <TableCell>{order.customer}</TableCell>
                     <TableCell>{new Date(order.date).toLocaleDateString()}</TableCell>
                     <TableCell>{order.items}</TableCell>

@@ -323,7 +323,7 @@ export const cacheUtils = {
       totalMutations: mutations.length,
       freshQueries: queries.filter(q => q.isStale() === false).length,
       staleQueries: queries.filter(q => q.isStale() === true).length,
-      fetchingQueries: queries.filter(q => q.isFetching()).length,
+      fetchingQueries: queries.filter(q => q.state.fetchStatus === 'fetching').length,
     };
   },
   

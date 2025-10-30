@@ -49,6 +49,26 @@ export const productImages = {
     'https://images.unsplash.com/photo-1571781926291-c477ebfd024b?w=800&h=800&fit=crop', // Serum
     'https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?w=800&h=800&fit=crop', // Face mask
     'https://images.unsplash.com/photo-1612817288484-6f916006741a?w=800&h=800&fit=crop', // Brush set
+  ],
+  food: [
+    'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=800&h=800&fit=crop', // Salad
+    'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=800&h=800&fit=crop', // Pizza
+    'https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?w=800&h=800&fit=crop', // Breakfast
+    'https://images.unsplash.com/photo-1551024601-bec78aea704b?w=800&h=800&fit=crop', // Pasta
+    'https://images.unsplash.com/photo-1563379926898-05f4575a45d8?w=800&h=800&fit=crop', // Coffee
+    'https://images.unsplash.com/photo-1555507036-ab1f4038808a?w=800&h=800&fit=crop', // Steak
+    'https://images.unsplash.com/photo-1565299585323-38d6b0865b47?w=800&h=800&fit=crop', // Burger
+    'https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?w=800&h=800&fit=crop', // Dessert
+  ],
+  phone: [
+    'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=800&h=800&fit=crop', // iPhone
+    'https://images.unsplash.com/photo-1605236453806-6ff36851218e?w=800&h=800&fit=crop', // Samsung phone
+    'https://images.unsplash.com/photo-1592286927505-f670e5cc5770?w=800&h=800&fit=crop', // Modern smartphone
+    'https://images.unsplash.com/photo-1598327105666-5b89351aff97?w=800&h=800&fit=crop', // Phone with case
+    'https://images.unsplash.com/photo-1574944985070-8f3ebc6b79d2?w=800&h=800&fit=crop', // iPhone Pro
+    'https://images.unsplash.com/photo-1585060544812-6b45742d762f?w=800&h=800&fit=crop', // Android phone
+    'https://images.unsplash.com/photo-1601784551446-20c9e07cdbdb?w=800&h=800&fit=crop', // Phone collection
+    'https://images.unsplash.com/photo-1580910051074-3eb694886505?w=800&h=800&fit=crop', // Luxury phone
   ]
 };
 

@@ -5,7 +5,7 @@ import {
   CardContent, 
   Typography, 
   IconButton,
-  Grid,
+  Grid2,
   Chip,
   Avatar
 } from '@mui/material';
@@ -96,9 +96,9 @@ const QuickNav: React.FC<QuickNavProps> = ({
         </Typography>
       </Box>
 
-      <Grid container spacing={3}>
+      <Grid2 container spacing={3}>
         {navItems.map((item, index) => (
-          <Grid item key={item.key} xs={12} sm={6} md={4} component="div">
+          <Grid2 key={item.key} size={{ xs: 12, sm: 6, md: 4 }}>
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -164,9 +164,9 @@ const QuickNav: React.FC<QuickNavProps> = ({
                 </CardContent>
               </Card>
             </motion.div>
-          </Grid>
+          </Grid2>
         ))}
-      </Grid>
+      </Grid2>
 
       {/* Current View Indicator */}
       <Box sx={{ mt: 4, textAlign: 'center' }}>
