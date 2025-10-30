@@ -47,6 +47,7 @@ import MessagingPage from './pages/MessagingPage';
 import DirectMessages from './components/DirectMessages';
 import EnhancedProfile from './components/EnhancedProfile';
 import AnalyticsDashboard from './components/AnalyticsDashboard';
+import ProfileAnalytics from './components/ProfileAnalytics';
 import CreatePost from './components/CreatePost';
 import Settings from './components/Settings';
 import ProductPage from './components/ProductPage';
@@ -721,6 +722,19 @@ const AppContent: React.FC = () => {
                 onFollowToggle={() => {}}
                 onEditProfile={() => handleNavigate('edit-profile')}
               />
+            </motion.div>
+          )}
+
+          {/* Analytics View */}
+          {currentView === 'analytics' && (
+            <motion.div
+              key="analytics"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.3 }}
+            >
+              <ProfileAnalytics />
             </motion.div>
           )}
 

@@ -271,7 +271,7 @@ const Navigation: React.FC<NavigationProps> = ({
     { key: 'explore', label: 'Explore', icon: Explore },
     { key: 'videos', label: 'Reels', icon: VideoLibrary },
     { key: 'messages', label: 'Messages', icon: Message },
-    { key: 'trending', label: 'Trending', icon: TrendingUp },
+    { key: 'analytics', label: 'Analytics', icon: TrendingUp },
     { key: 'profile', label: 'Profile', icon: Person }
   ];
 
