@@ -3,7 +3,6 @@
   "version": 2,
   "buildCommand": "CI=false DISABLE_ESLINT_PLUGIN=true GENERATE_SOURCEMAP=false TSC_COMPILE_ON_ERROR=true npm run build",
   "outputDirectory": "build",
-  "installCommand": "npm ci --omit=dev",
   "framework": "create-react-app",
   "rewrites": [
     {

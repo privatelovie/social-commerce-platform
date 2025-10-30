@@ -570,6 +570,30 @@ const AppContent: React.FC = () => {
                 Create Account
               </Button>
             </Box>
+            
+            <Button
+              variant="text"
+              size="small"
+              onClick={() => {
+                // Bypass login - set demo user
+                localStorage.setItem('token', 'demo-token');
+                localStorage.setItem('user', JSON.stringify({
+                  id: 'demo-user',
+                  username: 'demo_user',
+                  displayName: 'Demo User',
+                  email: 'demo@example.com',
+                  avatar: 'https://ui-avatars.com/api/?name=Demo+User&background=1976d2&color=fff&size=100'
+                }));
+                window.location.reload();
+              }}
+              sx={{ 
+                mt: 2, 
+                color: 'rgba(255,255,255,0.7)',
+                '&:hover': { color: 'rgba(255,255,255,1)' }
+              }}
+            >
+              Continue as Guest (Demo Mode)
+            </Button>
           </Paper>
         </motion.div>
 
