@@ -144,6 +144,22 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     const initializeAuth = async () => {
       setLoading(true);
       
+      // Check for demo mode
+      const demoUser = localStorage.getItem('user');
+      const demoToken = localStorage.getItem('token');
+      
+      if (demoToken === 'demo-token' && demoUser) {
+        // Demo mode - use stored demo user
+        try {
+          const parsedUser = JSON.parse(demoUser);
+          setUser(mapUserData(parsedUser));
+        } catch (error) {
+          console.error('Failed to parse demo user:', error);
+        }
+        setLoading(false);
+        return;
+      }
+      
       if (authService.isAuthenticated()) {
         try {
           // Get fresh user data from backend
