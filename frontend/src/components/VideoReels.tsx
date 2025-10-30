@@ -102,9 +102,12 @@ const VideoReels: React.FC<VideoReelsProps> = ({
   const [showProduct, setShowProduct] = useState(false);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
+  const [isScrolling, setIsScrolling] = useState(false);
   
   const videoRefs = useRef<(HTMLVideoElement | null)[]>([]);
   const containerRef = useRef<HTMLDivElement>(null);
+  const scrollTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const lastScrollTime = useRef<number>(0);
   const { mode } = useThemeMode();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
@@ -206,6 +209,78 @@ const VideoReels: React.FC<VideoReelsProps> = ({
     document.addEventListener('keydown', handleKeyPress);
     return () => document.removeEventListener('keydown', handleKeyPress);
   }, [currentVideoIndex, videos.length, isPlaying, isMuted]);
+
+  // Trackpad/Mouse Wheel Navigation with smooth scrolling
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    let accumulatedDelta = 0;
+    const SCROLL_THRESHOLD = 50; // Sensitivity threshold
+    const DEBOUNCE_TIME = 150; // ms between video changes
+
+    const handleWheel = (event: WheelEvent) => {
+      event.preventDefault();
+      
+      const now = Date.now();
+      const timeSinceLastScroll = now - lastScrollTime.current;
+      
+      // Debounce rapid scrolls
+      if (timeSinceLastScroll < DEBOUNCE_TIME && isScrolling) {
+        return;
+      }
+
+      // Accumulate delta for smooth detection
+      accumulatedDelta += event.deltaY;
+
+      // Clear existing timeout
+      if (scrollTimeoutRef.current) {
+        clearTimeout(scrollTimeoutRef.current);
+      }
+
+      // Detect scroll direction and change video
+      if (Math.abs(accumulatedDelta) > SCROLL_THRESHOLD) {
+        setIsScrolling(true);
+        lastScrollTime.current = now;
+
+        if (accumulatedDelta > 0) {
+          // Scrolling down - next video
+          if (currentVideoIndex < videos.length - 1) {
+            setCurrentVideoIndex(currentVideoIndex + 1);
+            setProgress(0);
+          }
+        } else {
+          // Scrolling up - previous video
+          if (currentVideoIndex > 0) {
+            setCurrentVideoIndex(currentVideoIndex - 1);
+            setProgress(0);
+          }
+        }
+
+        accumulatedDelta = 0;
+
+        // Reset scrolling flag after debounce time
+        scrollTimeoutRef.current = setTimeout(() => {
+          setIsScrolling(false);
+        }, DEBOUNCE_TIME);
+      }
+
+      // Auto-reset accumulated delta
+      scrollTimeoutRef.current = setTimeout(() => {
+        accumulatedDelta = 0;
+      }, 200);
+    };
+
+    // Use passive: false to allow preventDefault
+    container.addEventListener('wheel', handleWheel, { passive: false });
+
+    return () => {
+      container.removeEventListener('wheel', handleWheel);
+      if (scrollTimeoutRef.current) {
+        clearTimeout(scrollTimeoutRef.current);
+      }
+    };
+  }, [currentVideoIndex, videos.length, isScrolling]);
 
   const formatNumber = (num: number): string => {
     if (num >= 1000000) {

@@ -48,6 +48,7 @@ import DirectMessages from './components/DirectMessages';
 import EnhancedProfile from './components/EnhancedProfile';
 import AnalyticsDashboard from './components/AnalyticsDashboard';
 import ProfileAnalytics from './components/ProfileAnalytics';
+import ConnectionTest from './components/ConnectionTest';
 import CreatePost from './components/CreatePost';
 import Settings from './components/Settings';
 import ProductPage from './components/ProductPage';
@@ -735,6 +736,19 @@ const AppContent: React.FC = () => {
               transition={{ duration: 0.3 }}
             >
               <ProfileAnalytics />
+            </motion.div>
+          )}
+
+          {/* Diagnostics View */}
+          {currentView === 'diagnostics' && (
+            <motion.div
+              key="diagnostics"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.3 }}
+            >
+              <ConnectionTest />
             </motion.div>
           )}
 
